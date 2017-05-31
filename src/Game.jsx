@@ -47,7 +47,7 @@ var Game = React.createClass({
   if(this.state.win==1){
     return (
       <div>
-        <h2>You Win {this.state.viewStart} {this.state.endGame}</h2>
+        <h2>You Win</h2>
         <Button handleClick={this.restart} text={"Play again"}/>
       </div>
       )
