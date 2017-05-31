@@ -4,8 +4,8 @@ const { resolve } = require('path');
 module.exports = {
   devtool: 'eval-source-map',
   entry: [
-    './gh-pages/index',
-    './gh-pages/styles/styles'
+    './docs/index',
+    './docs/styles/styles'
   ],
   output: {
     path: resolve(__dirname + '/dist'),
@@ -13,7 +13,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: resolve(__dirname, 'gh-pages')
+    contentBase: resolve(__dirname, 'docs')
   },
   plugins: [
   ],
