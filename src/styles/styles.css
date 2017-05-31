@@ -1,0 +1,73 @@
+#tile-frame .glyphicon {
+  font-size: .85em;
+  color: #DEC75D;
+}
+
+#tile-frame {
+  width: 70%;
+  max-width: 600px;
+}
+
+#tile-frame .well {
+  position: relative;
+  height: 0;
+  float: left;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+#tile-frame .unclickable {
+  background-color: #000000;
+  cursor: default;
+}
+
+#tile-frame .clickable {
+  background-color: #DB8A39;
+  cursor: pointer;
+}
+
+#tile-frame .winning {
+  background-color: red;
+  cursor: pointer;
+}
+
+#tile-frame .starting {
+  background-color: green;
+  pointer: default;
+}
+
+#game{
+  width: 100%;
+}
+
+.container{
+  width: 100%;
+}
+
+#info{
+  display: table;
+  height: 100%;
+}
+
+#infoButtons{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.btn-lg{
+  border: white;
+  margin: 10px;
+}
+
+#tile-frame .traveled{
+  background-image: url("../images/footsteps.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+#tile-frame .traveledInv{
+  background-image: url("../images/footstepsInv.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
