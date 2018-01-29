@@ -6,10 +6,28 @@ import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 
 const itemList = (items) => items.map(item => <li>item</li>);
 
-const getArtists = () => {
+const FestivalOptions = ({options, handleCheck}) => {
+  return (
+    <div style={{display:"inline-block"}}>
+      {options.map(option =>
+        <div
+          className="well"
+          key={option}
+        >
+        {option}
+        <input type="checkbox" onChange={() => handleCheck(option)}/>
+        </div>)}
+    </div>
+  )
+}
+
+const getArtists = (options) => {
   const artistsUnsorted = [];
   let artistsSorted = [];
   festivals.forEach(festival => {
+    if (!options.includes(festival.name)) {
+      return;
+    }
     for (let i = 0; i < festival.artists.length; i++){
       artistsUnsorted.push([festival.artists[i],((i+1)/festival.artists.length)*((i+1)/festival.artists.length)]);
     }
@@ -51,10 +69,12 @@ const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems,
 
 export default class TileBoard extends Component {
   state = {
-    items: getArtists(),
+    items: getArtists(festivals.map(festival => festival.name)),
     bestMatch: '',
     festivalScores: [],
-    selectedItems: []
+    selectedItems: [],
+    selectedFestivals: festivals.map(festival => festival.name),
+    festivalOptions: festivals.map(festival => festival.name)
   };
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
@@ -104,6 +124,18 @@ export default class TileBoard extends Component {
     this.setState({bestMatch, festivalScores: scoresArray});
   };
 
+  handleFestivalCheck = (value) => {
+    this.setState(prevState => {
+      if (prevState.selectedFestivals.includes(value)) {
+        prevState.selectedFestivals.splice(prevState.selectedFestivals.indexOf(value),1);
+      }
+      else {
+        prevState.selectedFestivals.push(value);
+      }
+      return {items: getArtists(prevState.selectedFestivals)}
+    })
+  }
+
   onlySelected = () => {
     this.setState(prevState => {
       return {items: prevState.selectedItems}
@@ -112,6 +144,10 @@ export default class TileBoard extends Component {
 
   render() {
     return <div className="myFrame">
+      <FestivalOptions
+        options={this.state.festivalOptions}
+        handleCheck={this.handleFestivalCheck}
+      />
       <SortableList
         items={this.state.items}
         selectedItems={this.state.selectedItems}
