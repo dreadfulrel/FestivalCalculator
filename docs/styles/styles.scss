@@ -45,11 +45,11 @@
     font-weight: 400;
 }
 
-.stylizedItem .cancelButton {
+.stylizedItem .removeButton {
   visibility: hidden;
 }
 
-.stylizedItem:hover .cancelButton {
+.stylizedItem:hover .removeButton {
   visibility: visible;
 }
 
@@ -62,7 +62,11 @@ p {
   display: inline-block;
 }
 
-.cancelButton {
+.selected {
+  background-color: #e582dd;
+}
+
+.removeButton {
   float:right;
   cursor: pointer;
 }

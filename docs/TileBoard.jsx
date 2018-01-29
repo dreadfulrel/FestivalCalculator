@@ -4,6 +4,8 @@ import festivals from './Festivals';
 import ArtistTile from './ArtistTile'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
+const itemList = (items) => items.map(item => <li>item</li>);
+
 const getArtists = () => {
   const artistsUnsorted = [];
   let artistsSorted = [];
@@ -21,13 +23,27 @@ const getArtists = () => {
   }
   return artistsSorted;
 }
-const SortableItem = SortableElement(({value, handleRemoveItem}) => <ArtistTile text={value} handleRemoveItem={handleRemoveItem}/>);
+const SortableItem = SortableElement(({value, handleRemoveItem, selected, handleSelect}) =>
+  <ArtistTile
+    text={value}
+    handleRemoveItem={handleRemoveItem}
+    handleSelect={handleSelect}
+    selected={selected}
+  />
+);
 
-const SortableList = SortableContainer(({items, handleRemoveItem}) => {
+const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems, handleSelect}) => {
   return (
     <div className="list stylizedList">
       {items.map((value, index) => (
-        <SortableItem key={value} index={index} value={value} handleRemoveItem={() => handleRemoveItem(index)}/>
+        <SortableItem
+          key={value}
+          index={index}
+          value={value}
+          handleRemoveItem={() => handleRemoveItem(index)}
+          handleSelect={() => handleSelect(index)}
+          selected={selectedItems.includes(value)}
+        />
       ))}
     </div>
   );
@@ -36,7 +52,9 @@ const SortableList = SortableContainer(({items, handleRemoveItem}) => {
 export default class TileBoard extends Component {
   state = {
     items: getArtists(),
-    bestMatch: ''
+    bestMatch: '',
+    festivalScores: [],
+    selectedItems: []
   };
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
@@ -44,7 +62,6 @@ export default class TileBoard extends Component {
     });
   };
   handleRemoveItem = (index) => {
-    console.log(index);
     this.setState(prevState => {
       const newItems = prevState.items;
       newItems.splice(index,1)
@@ -52,7 +69,19 @@ export default class TileBoard extends Component {
         items: newItems
       }
     })
-  }
+  };
+
+  handleSelect = (index) => {
+    this.setState(prevState => {
+      if(!prevState.selectedItems.includes(prevState.items[index])) {
+        prevState.selectedItems.push(prevState.items[index]);
+      }
+      return {
+        selectedItems: prevState.selectedItems
+      }
+    })
+  };
+
   calculateBestFestival = () => {
     const festivalScores = {};
     festivals.forEach(festival => {
@@ -63,23 +92,39 @@ export default class TileBoard extends Component {
         }
       }
     })
+
     let bestMatch =  Object.keys(festivalScores)[0];
     for (var key in festivalScores) {
       if (festivalScores[key] > festivalScores[bestMatch]) {
         bestMatch = key;
       }
     }
-    this.setState({bestMatch});
+    const scoresArray = Object.keys(festivalScores).map(a => [a + " - ", festivalScores[a]]);
+    scoresArray.sort((a,b) => b[1] - a[1]);
+    this.setState({bestMatch, festivalScores: scoresArray});
+  };
+
+  onlySelected = () => {
+    this.setState(prevState => {
+      return {items: prevState.selectedItems}
+    })
   }
+
   render() {
     return <div className="myFrame">
       <SortableList
         items={this.state.items}
+        selectedItems={this.state.selectedItems}
         onSortEnd={this.onSortEnd}
         handleRemoveItem={this.handleRemoveItem}
+        handleSelect={this.handleSelect}
         />
       <p className="well" onClick={this.calculateBestFestival}>Calculate</p>
-      <p>{this.state.bestMatch}</p>
+      <p className="well" onClick={this.onlySelected}>Filter Selected</p>
+      <br/>
+      <p>Your best festival is {this.state.bestMatch}</p>
+      <br/>
+      <ul>{this.state.festivalScores.map(item => <li>{item}</li>)}</ul>
     </div>;
   }
 }
