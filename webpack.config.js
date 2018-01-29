@@ -25,13 +25,16 @@ module.exports = {
         use: ['babel-loader']
       },
       {
-        test: /(\.css)$/,
-        use: ['style-loader','raw-loader'],
+        test   : /\.css$/,
+        loaders: ['style-loader','raw-loader', 'css-loader', 'resolve-url-loader'],
         exclude: /node_modules/
+      }, {
+        test   : /\.scss$/,
+        loaders: ['style-loader', 'css-loader', 'resolve-url-loader', 'sass-loader?sourceMap']
       }
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css']
+    extensions: ['.js', '.jsx', '.css', '.scss']
   }
 };

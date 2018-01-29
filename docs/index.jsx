@@ -1,16 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import getMaze from './GenerateBoard';
-import Game from './Game'
+import {render} from 'react-dom';
+import TileBoard from './TileBoard'
 
-const gameRows = 7;
-function generateEnd(rows){
-  var end = Math.floor(Math.random() * rows *rows );
-  var theMaze = getMaze(rows);
-  return theMaze[end] ? end : generateEnd(rows);
-}
+render(<TileBoard />, document.getElementById("container"));
 
-ReactDOM.render(
-  <Game endPos={generateEnd(gameRows)+1} numberOfRows={gameRows}/>,
+/*render(
+  <TileBoard/>,
   document.getElementById("container")
-);
+);*/

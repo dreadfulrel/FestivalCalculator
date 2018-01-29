@@ -1,0 +1,81 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400);
+
+.container {
+    display: flex;
+    height: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+// Base styles
+.list {
+    width: 400px;
+    height: 600px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #999;
+}
+
+.item {
+    position: relative;
+    border-bottom: 1px solid #999;
+}
+
+// Stylized
+.stylizedList {
+    position: relative;
+    z-index: 0;
+    background-color: #F3F3F3;
+    border: 1px solid #EFEFEF;
+    border-radius: 3px;
+    outline: none;
+}
+.stylizedItem {
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #FFF;
+    border-bottom: 1px solid #EFEFEF;
+    box-sizing: border-box;
+    user-select: none;
+    cursor: -webkit-grabbing;
+    color: #333;
+    font-weight: 400;
+}
+
+.stylizedItem .cancelButton {
+  visibility: hidden;
+}
+
+.stylizedItem:hover .cancelButton {
+  visibility: visible;
+}
+
+p {
+  margin: 0;
+  display:inline;
+}
+
+.myFrame {
+  display: inline-block;
+}
+
+.cancelButton {
+  float:right;
+  cursor: pointer;
+}
+
+:global {
+    body {
+        font-family: 'Montserrat', 'Helvetica Neue', 'Helvetica', arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: rgba(#F4F5F9, 0.7);
+    }
+    html, body, #container {
+        height: 100%;
+        margin: 0;
+    }
+}
