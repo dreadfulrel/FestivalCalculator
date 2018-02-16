@@ -7,7 +7,6 @@ export default class ArtistTile extends React.Component{
     return(
       <div
         className={"item stylizedItem"+ (this.props.selected ? " selected" : "")}
-        onClick={this.props.handleSelect}
       >
         <p className="artistName">{this.props.text}</p>
         <img
