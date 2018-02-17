@@ -68,13 +68,16 @@ const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems,
 
 export default class TileBoard extends Component {
   state = {
-    items: getArtists(festivals.map(festival => festival.name)),
+    items: getArtists(festivals.map(festival => festival.name)).slice(0,10),
     bestMatch: '',
     festivalScores: [],
     selectedItems: [],
     selectedFestivals: festivals.map(festival => festival.name),
     festivalOptions: festivals.map(festival => festival.name)
   };
+
+  allArtists = getArtists(festivals.map(festival => festival.name));
+
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
       items: arrayMove(this.state.items, oldIndex, newIndex),
