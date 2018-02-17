@@ -1,22 +1,21 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import festivals from './Festivals';
-import ArtistTile from './ArtistTile'
+import ArtistTile from './ArtistTile';
+import SelectButton from './SelectButton'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
 const itemList = (items) => items.map(item => <li>item</li>);
 
-const FestivalOptions = ({options, handleCheck}) => {
+const FestivalOptions = ({options, selected, handleClick}) => {
   return (
     <div style={{display:"inline-block"}}>
       {options.map(option =>
-        <div
-          className="well"
-          key={option}
-        >
-        {option}
-        <input type="checkbox" onChange={() => handleCheck(option)}/>
-        </div>)}
+        <SelectButton
+          text={option}
+          handleClick={handleClick}
+          selected={selected.includes(option)}
+          />)}
     </div>
   )
 }
@@ -147,7 +146,8 @@ export default class TileBoard extends Component {
       <div className="myFrame">
         <FestivalOptions
           options={this.state.festivalOptions}
-          handleCheck={this.handleFestivalCheck}
+          selected={this.state.selectedFestivals}
+          handleClick={this.handleFestivalCheck}
         />
         <div className="columns">
           <div className="artistList">
