@@ -49,9 +49,9 @@ const SortableItem = SortableElement(({value, handleRemoveItem, selected, handle
   />
 );
 
-const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems, handleSelect}) => {
+const SortableList = SortableContainer(({items, assignArtistList, handleArtistListScroll, handleRemoveItem, selectedItems, handleSelect}) => {
   return (
-    <div className="list stylizedList">
+    <div className="list stylizedList" ref={(artistList) => assignArtistList(artistList)} onScroll={(artistList) => handleArtistListScroll(artistList)}>
       {items.map((value, index) => (
         <SortableItem
           key={value}
@@ -68,15 +68,29 @@ const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems,
 
 export default class TileBoard extends Component {
   state = {
-    items: getArtists(festivals.map(festival => festival.name)).slice(0,10),
+    items: getArtists(festivals.map(festival => festival.name)).slice(0,15),
     bestMatch: '',
     festivalScores: [],
     selectedItems: [],
     selectedFestivals: festivals.map(festival => festival.name),
-    festivalOptions: festivals.map(festival => festival.name)
+    festivalOptions: festivals.map(festival => festival.name),
+    artistList: null
   };
 
-  allArtists = getArtists(festivals.map(festival => festival.name));
+  allArtists = getArtists(festivals.map(festival => festival.name))
+
+  assignArtistList = (a) => {this.setState({artistList: a});}
+
+  handleArtistListScroll = (artistList) => {console.log(this.state.artistList.scrollTop)}
+
+  loadMoreArtists = () => {
+    this.setState(prevState => {
+      let numArtists = prevState.items.length;
+      return {
+        items: prevState.items.concat(getArtists(festivals.map(festival => festival.name)).slice(length, length + 15))
+      }
+    })
+  };
 
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
@@ -160,6 +174,7 @@ export default class TileBoard extends Component {
             onSortEnd={this.onSortEnd}
             handleRemoveItem={this.handleRemoveItem}
             handleSelect={this.handleSelect}
+            assignArtistList={(artistList) => this.assignArtistList(artistList)}
             />
           <p className="well" onClick={this.calculateBestFestival}>Calculate</p>
           <p className="well" onClick={this.onlySelected}>Filter Selected</p>
