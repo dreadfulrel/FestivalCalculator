@@ -143,24 +143,31 @@ export default class TileBoard extends Component {
   }
 
   render() {
-    return <div className="myFrame">
-      <FestivalOptions
-        options={this.state.festivalOptions}
-        handleCheck={this.handleFestivalCheck}
-      />
-      <SortableList
-        items={this.state.items}
-        selectedItems={this.state.selectedItems}
-        onSortEnd={this.onSortEnd}
-        handleRemoveItem={this.handleRemoveItem}
-        handleSelect={this.handleSelect}
+    return (
+      <div className="myFrame">
+        <FestivalOptions
+          options={this.state.festivalOptions}
+          handleCheck={this.handleFestivalCheck}
         />
-      <p className="well" onClick={this.calculateBestFestival}>Calculate</p>
-      <p className="well" onClick={this.onlySelected}>Filter Selected</p>
-      <br/>
-      <p>Your best festival is {this.state.bestMatch}</p>
-      <br/>
-      <ul>{this.state.festivalScores.map(item => <li>{item}</li>)}</ul>
-    </div>;
+        <div className="columns">
+          <div className="artistList">
+          <SortableList
+            items={this.state.items}
+            selectedItems={this.state.selectedItems}
+            onSortEnd={this.onSortEnd}
+            handleRemoveItem={this.handleRemoveItem}
+            handleSelect={this.handleSelect}
+            />
+          <p className="well" onClick={this.calculateBestFestival}>Calculate</p>
+          <p className="well" onClick={this.onlySelected}>Filter Selected</p>
+          <br/>
+          </div>
+          <div className="festivalResults">
+            <p>Your best festival is {this.state.bestMatch}</p>
+            <br/>
+            <ul>{this.state.festivalScores.map(item => <li>{item}</li>)}</ul>
+          </div>
+        </div>
+      </div>);
   }
 }

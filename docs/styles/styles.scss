@@ -59,7 +59,20 @@ p {
 }
 
 .myFrame {
-  display: inline-block;
+  display: inline;
+  width: 80%;
+}
+
+.columns {
+    display: grid;
+}
+
+.artistList {
+    grid-column: 1;
+}
+
+.festivalResults {
+    grid-column: 2;
 }
 
 .selected {
