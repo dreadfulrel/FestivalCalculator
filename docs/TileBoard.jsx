@@ -5,11 +5,9 @@ import ArtistTile from './ArtistTile';
 import SelectButton from './SelectButton'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
-const itemList = (items) => items.map(item => <li>item</li>);
-
 const FestivalOptions = ({options, selected, handleClick}) => {
   return (
-    <div style={{display:"inline-block"}}>
+    <div style={{display:"inline-block", margin:"2em 0 2em 0" }}>
       {options.map(option =>
         <SelectButton
           text={option}
@@ -40,23 +38,26 @@ const getArtists = (options) => {
   }
   return artistsSorted;
 }
-const SortableItem = SortableElement(({value, handleRemoveItem, selected, handleSelect}) =>
+
+const SortableItem = SortableElement(({rank,value, handleRemoveItem, selected, handleSelect}) =>
   <ArtistTile
     text={value}
+    rank={rank}
     handleRemoveItem={handleRemoveItem}
     handleSelect={handleSelect}
     selected={selected}
   />
 );
 
-const SortableList = SortableContainer(({items, assignArtistList, handleArtistListScroll, handleRemoveItem, selectedItems, handleSelect}) => {
+const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems, handleSelect}) => {
   return (
-    <div className="list stylizedList" ref={(artistList) => assignArtistList(artistList)} onScroll={(artistList) => handleArtistListScroll(artistList)}>
+    <div className="list stylizedList">
       {items.map((value, index) => (
         <SortableItem
           key={value}
           index={index}
           value={value}
+          rank={index + 1}
           handleRemoveItem={() => handleRemoveItem(index)}
           handleSelect={() => handleSelect(index)}
           selected={selectedItems.includes(value)}
@@ -68,29 +69,17 @@ const SortableList = SortableContainer(({items, assignArtistList, handleArtistLi
 
 export default class TileBoard extends Component {
   state = {
-    items: getArtists(festivals.map(festival => festival.name)).slice(0,15),
+    items: getArtists(festivals.map(festival => festival.name)),
     bestMatch: '',
     festivalScores: [],
     selectedItems: [],
     selectedFestivals: festivals.map(festival => festival.name),
     festivalOptions: festivals.map(festival => festival.name),
-    artistList: null
+    filtered: false,
+    showFestivals: false
   };
 
-  allArtists = getArtists(festivals.map(festival => festival.name))
-
-  assignArtistList = (a) => {this.setState({artistList: a});}
-
-  handleArtistListScroll = (artistList) => {console.log(this.state.artistList.scrollTop)}
-
-  loadMoreArtists = () => {
-    this.setState(prevState => {
-      let numArtists = prevState.items.length;
-      return {
-        items: prevState.items.concat(getArtists(festivals.map(festival => festival.name)).slice(length, length + 15))
-      }
-    })
-  };
+  allArtists = getArtists(festivals.map(festival => festival.name));
 
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState({
@@ -154,30 +143,40 @@ export default class TileBoard extends Component {
 
   onlySelected = () => {
     this.setState(prevState => {
-      return {items: prevState.selectedItems}
+      return {items: prevState.selectedItems, filtered: true, selectedItems: []}
     })
   }
+
+  handleFilterBands = (e) => {
+    this.setState({items: getArtists(festivals.map(festival => festival.name)).filter(item => item.includes(e.target.value))});
+  }
+
 
   render() {
     return (
       <div className="myFrame">
-        <FestivalOptions
+        {this.state.showFestivals && <FestivalOptions
           options={this.state.festivalOptions}
           selected={this.state.selectedFestivals}
           handleClick={this.handleFestivalCheck}
-        />
+        />}
+        <input className="effect-16" type="text" placeholder="Like and rank bands" contentEditable={false}/>
         <div className="columns">
           <div className="artistList">
+            <button onClick={this.onlySelected}>Show liked</button>
+            <button onClick={this.calculateBestFestival} disabled={!this.state.filtered}>Find my festival</button>
+            <div className="col-3 input-effect">
+              <input className="effect-16" type="text" placeholder="" onChange={this.handleFilterBands}/>
+              <label>Search for a band..</label>
+              <span className="focus-border"/>
+            </div>
           <SortableList
             items={this.state.items}
             selectedItems={this.state.selectedItems}
             onSortEnd={this.onSortEnd}
             handleRemoveItem={this.handleRemoveItem}
             handleSelect={this.handleSelect}
-            assignArtistList={(artistList) => this.assignArtistList(artistList)}
             />
-          <p className="well" onClick={this.calculateBestFestival}>Calculate</p>
-          <p className="well" onClick={this.onlySelected}>Filter Selected</p>
           <br/>
           </div>
           <div className="festivalResults">

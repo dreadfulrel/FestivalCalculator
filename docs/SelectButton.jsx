@@ -7,7 +7,7 @@ const SelectButton = ({text, handleClick, selected}) => {
         className={"selectButton " + (selected ? "selectedBackground" : "unselectedBackground")}
         onClick={() => handleClick(text)}
       >
-      {text}
+      {text + (selected ? '      x' : '')}
     </button>
     );
 
