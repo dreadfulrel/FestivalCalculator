@@ -10,17 +10,17 @@ export default class ArtistTile extends React.Component{
       <div
         className={"item stylizedItem"+ (this.props.selected ? " selected" : "")}
       >
-        <DragHandle />
-        <p className="artistRank">{this.props.rank}</p>
+        {this.props.allowRanking && <DragHandle />}
+        {this.props.allowRanking && <p className="artistRank">{this.props.rank}</p>}
         <p className="artistName">{this.props.text}</p>
-        <img
+        {!this.props.allowRanking && <img
           src="https://cdn.expansion.mx/dims4/default/067ba8e/2147483647/crop/1719x967%2B0%2B197/resize/800x450%5E/quality/75/?url=https%3A%2F%2Fcdn.expansion.mx%2F1e%2F69%2Fd55b5ba34ea9bee2d8bf27d5878d%2Fistock-669948704.jpg"
           className="likeButton buttons"
           onClick={this.props.handleSelect}
           height="10%"
           width="10%"
-        />
-        <p className="removeButton buttons" onClick={this.props.handleRemoveItem}>x</p>
+        />}
+        {!this.props.allowRanking && <p className="removeButton buttons" onClick={this.props.handleRemoveItem}>x</p>}
       </div>
     );
   }
@@ -29,7 +29,8 @@ export default class ArtistTile extends React.Component{
 ArtistTile.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
+  allowRanking: PropTypes.bool
 }
 
 ArtistTile.defaultProps = {

@@ -39,17 +39,18 @@ const getArtists = (options) => {
   return artistsSorted;
 }
 
-const SortableItem = SortableElement(({rank,value, handleRemoveItem, selected, handleSelect}) =>
+const SortableItem = SortableElement(({rank,value, handleRemoveItem, selected, handleSelect, allowRanking}) =>
   <ArtistTile
     text={value}
     rank={rank}
     handleRemoveItem={handleRemoveItem}
     handleSelect={handleSelect}
     selected={selected}
+    allowRanking={allowRanking}
   />
 );
 
-const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems, handleSelect}) => {
+const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems, handleSelect, allowRanking}) => {
   return (
     <div className="list stylizedList">
       {items.map((value, index) => (
@@ -61,6 +62,7 @@ const SortableList = SortableContainer(({items, handleRemoveItem, selectedItems,
           handleRemoveItem={() => handleRemoveItem(index)}
           handleSelect={() => handleSelect(index)}
           selected={selectedItems.includes(value)}
+          allowRanking={allowRanking}
         />
       ))}
     </div>
@@ -176,6 +178,7 @@ export default class TileBoard extends Component {
             onSortEnd={this.onSortEnd}
             handleRemoveItem={this.handleRemoveItem}
             handleSelect={this.handleSelect}
+            allowRanking={this.state.filtered}
             />
           <br/>
           </div>
